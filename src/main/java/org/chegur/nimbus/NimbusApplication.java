@@ -9,5 +9,4 @@ public class NimbusApplication {
     public static void main(String[] args) {
         SpringApplication.run(NimbusApplication.class, args);
     }
-
 }
