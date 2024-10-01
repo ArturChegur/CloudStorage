@@ -1,13 +1,170 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Profile</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Music Player</title>
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Maven Pro', sans-serif;
+            overflow: hidden;
+        }
+
+        video#background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .player-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            width: 350px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .control-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+            height: 30px;
+        }
+
+        .control-button:hover {
+            transform: scale(1.4);
+        }
+
+        .control-button:active {
+            color: rgba(255, 255, 255, 0.54);
+        }
+
+        #volume_control {
+            width: 150px;
+            margin-top: 20px;
+            accent-color: white;
+            height: 20px;
+        }
+
+        .track-info {
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            height: 30px;
+        }
+    </style>
 </head>
 <body>
-<h2>Home</h2>
 
-<p>Welcome, <span th:text="${username}"></span>!</p>
-<a th:href="@{/logout}">Logout</a>
+<video id="background-video" autoplay loop muted>
+    <source src="/video/background-home.mp4" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+</video>
 
+<div class="player-container">
+    <div class="player-controls">
+        <button id="prev_button" class="control-button">⟨</button>
+        <button id="play_button" class="control-button">▶</button>
+        <button id="next_button" class="control-button">⟩</button>
+    </div>
+
+    <input type="range" id="volume_control" min="0" max="1" step="0.01" value="0.5">
+    <label for="volume_control"></label>
+
+    <div class="track-info" id="track-info">Track:</div>
+</div>
+
+<audio id="audio-player"></audio>
+
+<script>
+    const tracks = [
+        '/music/Bury the Light - Vergil battle theme.mp3',
+        '/music/GTA V - Welcome to Los Santos.mp3',
+        '/music/Beach house - space song.mp3',
+        '/music/Placebo - I know.mp3',
+        '/music/Resonance - home.mp3',
+        '/music/SEREBRO - sladko.mp3',
+        '/music/Tom Petty - Love Is A Long Road.mp3',
+        '/music/VØJ x Narvent Memory Reboot.mp3',
+        '/music/Madonna Like a Prayer.mp3',
+        '/music/Night Randevoo.mp3',
+        '/music/Initial D Max Power.mp3'
+    ];
+
+    let currentTrackIndex = 0;
+    const audioPlayer = document.getElementById('audio-player');
+    const playButton = document.getElementById('play_button');
+    const nextButton = document.getElementById('next_button');
+    const prevButton = document.getElementById('prev_button');
+    const volumeControl = document.getElementById('volume_control');
+    const trackInfo = document.getElementById('track-info');
+
+    function updateTrack() {
+        audioPlayer.src = tracks[currentTrackIndex];
+        trackInfo.textContent = `Track: ${tracks[currentTrackIndex].split('/').pop().replace('.mp3', '')}`;
+        audioPlayer.play();
+        playButton.textContent = '⏸';
+    }
+
+    playButton.addEventListener('click', () => {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+            playButton.textContent = '⏸';
+        } else {
+            audioPlayer.pause();
+            playButton.textContent = '▶';
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        updateTrack();
+    });
+
+    prevButton.addEventListener('click', () => {
+        currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+        updateTrack();
+    });
+
+    volumeControl.addEventListener('input', () => {
+        audioPlayer.volume = volumeControl.value;
+    });
+
+    updateTrack();
+</script>
 </body>
 </html>

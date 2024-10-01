@@ -3,6 +3,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: pass
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -10,9 +11,29 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        format_sql: true
+        use_sql_comments: true
 
-logging:
-  level:
-    org:
-      springframework: DEBUG
-      hibernate: ERROR
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 6000
+      database: 0
+
+server:
+  servlet:
+    session:
+      timeout: 30m
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: yourAccessKey
+  secret-key: yourSecretKey
+
+
+#logging:
+#  level:
+#    org:
+#      springframework: DEBUG
+#      hibernate: ERROR

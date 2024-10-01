@@ -17,11 +17,11 @@ public class UserModel {
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
-    private String name;
+    private String username;
+
+    @Column(name = "email",nullable = false)
+    private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "roles", nullable = false)
-    private String roles;
 }

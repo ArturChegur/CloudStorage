@@ -1,7 +1,5 @@
 package org.chegur.nimbus.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.chegur.nimbus.model.UserModel;
 import org.chegur.nimbus.repository.UserRepository;
@@ -21,16 +19,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserModel> userModel = userRepository.findByName(username);
+        Optional<UserModel> userModel = userRepository.findByUsername(username);
 
         if (userModel.isEmpty()) {
             throw new UsernameNotFoundException(username + " was not found");
         }
 
         return User.builder()
-                .username(userModel.get().getName())
+                .username(userModel.get().getUsername())
                 .password(userModel.get().getPassword())
-                .roles(userModel.get().getRoles().split(",\\s*"))
                 .build();
     }
 }

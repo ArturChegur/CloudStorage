@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registration Page</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Maven Pro', sans-serif;
+            overflow: hidden;
+        }
+
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: black;
+            border: none;
+        }
+
+        .login-container, .register-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 1rem;
+            padding: 50px 30px 30px;
+            width: 400px;
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            text-align: left;
+            z-index: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        h1 {
+            margin-top: 5px;
+            margin-bottom: 70px;
+            font-size: 38px;
+            font-weight: normal;
+            color: #fff;
+            position: relative;
+            text-align: center;
+        }
+
+        .message {
+            font-size: 16px;
+            color: #fff;
+            position: absolute;
+            top: 130px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"],
+        .register-container input[type="text"],
+        .register-container input[type="password"],
+        .register-container input[type="email"] {
+            width: 80%;
+            padding: 16px;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 18px;
+            outline: none;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .login-container input[type="text"]:focus,
+        .login-container input[type="password"]:focus,
+        .register-container input[type="text"]:focus,
+        .register-container input[type="password"]:focus,
+        .register-container input[type="email"]:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"],
+        .register-container input[type="text"],
+        .register-container input[type="password"],
+        .register-container input[type="email"] {
+            padding-left: 40px;
+        }
+
+        .input-icon i {
+            position: absolute;
+            left: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+        }
+
+        .divider {
+            width: 80%;
+            margin: 40px auto;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .register-message {
+            text-align: center;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 15px;
+        }
+
+        .register-message a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: text-decoration 0.3s ease;
+        }
+
+        .register-message a:hover {
+            text-decoration: underline;
+        }
+
+        .login-container input[type="submit"],
+        .register-container input[type="submit"] {
+            width: 90%;
+            padding: 16px;
+            margin: 15px auto;
+            display: block;
+            border-radius: 10px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.75);
+            color: black;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-container input[type="submit"]:hover,
+        .register-container input[type="submit"]:hover {
+            background-color: rgba(245, 245, 245, 0.9);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            text-align: center;
+            padding: 10px;
+        }
+
+        .bottom-bar a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .fade-out {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .register-container {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<video class="background-video" autoplay muted loop>
+    <source th:src="@{/video/background-auth.mp4}" type="video/mp4">
+</video>
+
+<div class="login-container" id="login-form" style="display:none;">
+    <h1>LogIn</h1>
+    <div th:if="${param.success}" class="message">
+        You successfully registered.
+    </div>
+    <div th:if="${param.error}" class="message">
+        Login or password incorrect.
+    </div>
+    <div th:if="${param.logout}" class="message">
+        You've been logged out.
+    </div>
+    <form th:action="@{/auth}" method="post">
+        <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <label>
+                <input name="username" type="text" placeholder="Username" required>
+            </label>
+        </div>
+        <div class="input-icon">
+            <i class="fas fa-lock"></i>
+            <label>
+                <input name="password" type="password" placeholder="Password" required>
+            </label>
+        </div>
+        <div class="divider"></div>
+        <input type="submit" value="Log in">
+    </form>
+    <p class="register-message">If you are not registered yet, please <a href="#" id="register-link">register here</a>.
+    </p>
+</div>
+
+<div class="register-container" id="register-form" style="display:none;">
+    <h1>Register</h1>
+    <div th:if="${param.error}" class="message">
+        User already exists.
+    </div>
+    <form th:action="@{/register}" method="post" th:object="${userModel}">
+        <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <label>
+                <input name="username" type="text" placeholder="Username" required>
+            </label>
+        </div>
+        <div class="input-icon">
+            <i class="fas fa-envelope"></i>
+            <label>
+                <input name="email" type="email" placeholder="Email" required>
+            </label>
+        </div>
+        <div class="input-icon">
+            <i class="fas fa-lock"></i>
+            <label>
+                <input name="password" type="password" placeholder="Password" required>
+            </label>
+        </div>
+        <div class="divider"></div>
+        <input type="submit" value="Register">
+    </form>
+    <p class="register-message">Already have an account? <a href="#" id="login-link">Log in here</a>.</p>
+</div>
+
+<div class="bottom-bar">
+    <a href="https://github.com/ArturChegur" target="_blank">
+        Created by @ArturChegur. All rights reserved.
+    </a>
+</div>
+
+<script>
+    function clearAnimation(element) {
+        element.classList.remove('fade-out', 'fade-in');
+    }
+
+    document.getElementById('register-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        loginForm.classList.add('fade-out');
+
+        setTimeout(function () {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            registerForm.classList.add('fade-in');
+            clearAnimation(loginForm);
+        }, 500);
+    });
+
+    document.getElementById('login-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        registerForm.classList.add('fade-out');
+
+        setTimeout(function () {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            loginForm.classList.add('fade-in');
+            clearAnimation(registerForm);
+        }, 500);
+    });
+
+    function getUrlParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    window.onload = function () {
+        const errorParam = getUrlParameter('error');
+
+        if (errorParam === 'user_exists') {
+            document.getElementById('register-form').style.display = 'block';
+        } else {
+            document.getElementById('login-form').style.display = 'block';
+        }
+    };
+</script>
+</body>
+</html>

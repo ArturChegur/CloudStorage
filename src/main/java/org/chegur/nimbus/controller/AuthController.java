@@ -15,25 +15,19 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/login")
-    public String getLoginPage() {
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String getRegistrationPage(Model model) {
-        model.addAttribute("user", new UserModel());
-        return "register";
+    @GetMapping("/auth")
+    public String getAuthPage(Model model) {
+        model.addAttribute("userModel", new UserModel());
+        return "auth";
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute UserModel userModel, Model model) {
+    public String registerUser(@ModelAttribute UserModel userModel) {
         try {
             authService.register(userModel);
-            return "redirect:/login?success";
+            return "redirect:/auth?success";
         } catch (Exception e) {
-            model.addAttribute("error", "Registration failed");
-            return "register";
+            return "redirect:/auth?error=user_exists";
         }
     }
 }

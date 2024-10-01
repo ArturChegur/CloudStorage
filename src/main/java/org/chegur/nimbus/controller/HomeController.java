@@ -13,7 +13,7 @@ public class HomeController {
 
     @GetMapping()
     public String getHomePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        model.addAttribute("username", userDetails.getUsername());
+        //model.addAttribute("username", userDetails.getUsername());
         return "home";
     }
 }
