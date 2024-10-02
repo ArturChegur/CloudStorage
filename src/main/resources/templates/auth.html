@@ -5,7 +5,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Registration Page</title>
+    <title>Auth</title>
     <style>
         body, html {
             margin: 0;
@@ -250,7 +250,7 @@
     <div th:if="${param.error}" class="message">
         User already exists.
     </div>
-    <form th:action="@{/register}" method="post" th:object="${userModel}">
+    <form th:action="@{/register}" method="post">
         <div class="input-icon">
             <i class="fas fa-user"></i>
             <label>

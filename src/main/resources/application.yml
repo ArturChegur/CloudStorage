@@ -7,12 +7,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
 
   data:
     redis:
@@ -30,10 +26,3 @@ minio:
   endpoint: http://localhost:9000
   access-key: yourAccessKey
   secret-key: yourSecretKey
-
-
-#logging:
-#  level:
-#    org:
-#      springframework: DEBUG
-#      hibernate: ERROR

@@ -1,15 +1,15 @@
 package org.chegur.nimbus.service;
 
 import lombok.RequiredArgsConstructor;
-import org.chegur.nimbus.model.UserModel;
+import org.chegur.nimbus.model.UserDetailsImpl;
+import org.chegur.nimbus.model.entity.User;
 import org.chegur.nimbus.repository.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,15 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserModel> userModel = userRepository.findByUsername(username);
 
-        if (userModel.isEmpty()) {
-            throw new UsernameNotFoundException(username + " was not found");
-        }
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + "was not found"));
 
-        return User.builder()
-                .username(userModel.get().getUsername())
-                .password(userModel.get().getPassword())
-                .build();
+        return UserDetailsImpl.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .authorities(List.of()).build();
     }
 }
